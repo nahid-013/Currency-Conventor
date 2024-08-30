@@ -9,6 +9,7 @@ from Routers.start_cmd_r import start_cmd
 from Routers.choose_curr_type_r import choose_curr_type_r
 from Routers.choose_curr_pairs_r import choose_curr_pair_r
 from Routers.convertion_procces import convertion_procces
+from Routers.convertion_crypto_procces import crypto_convertion_procces
 
 
 # модули.
@@ -23,6 +24,7 @@ async def main():
     dp.include_router(choose_curr_type_r)
     dp.include_router(choose_curr_pair_r)
     dp.include_router(convertion_procces)
+    dp.include_router(crypto_convertion_procces)
 
 
     await bot.delete_webhook(drop_pending_updates=True)
@@ -32,3 +34,4 @@ async def main():
 
 if __name__ == '__main__':
     asyncio.run(main())
+

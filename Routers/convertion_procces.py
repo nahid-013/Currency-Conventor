@@ -54,7 +54,7 @@ async def set_currency2(callback: CallbackQuery, state: FSMContext):
     data = await state.get_data()
     set_msg = await callback.message.edit_text(text=f'Введите нужную сумму для обмена\n\n'
                                           f'Курс: {all_currency[data["currency1"]]} {data["currency1"]} = '
-                                          f' {get_dans(data["currency1"], data["currency2"])}'
+                                          f'{get_dans(data["currency1"], data["currency2"])}'
                                           f' {all_currency[data["currency2"]]} {data["currency2"]}',
                                           reply_markup=reset_currency2)
 
@@ -86,7 +86,6 @@ async def set_count(message: Message, state: FSMContext):
 
 @convertion_procces.callback_query(F.data == 'finish_convertion')
 async def set_count(callback: CallbackQuery, state: FSMContext):
-    await callback.answer('wawwwaw')
     await print(state.get_data())
     await state.clear()
     await print(state.get_data())
