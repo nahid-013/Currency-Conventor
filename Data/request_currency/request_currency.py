@@ -1,6 +1,5 @@
 import requests
-from pycoingecko import CoinGeckoAPI
-cg = CoinGeckoAPI()
+
 
 API_KEY =  "7e0d971cd8c1de510fb11b16"
 def get_dans(from_currency, to_currency):
@@ -10,10 +9,4 @@ def get_dans(from_currency, to_currency):
 
 # get_dans('USD','RUB')
 
-
-def get_crypto_dans_from(from_currency):
-    def inner(to_currency):
-        res = cg.get_price(ids=from_currency, vs_currencies=to_currency)
-        return res[from_currency][to_currency]
-    return inner
 

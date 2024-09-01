@@ -1,13 +1,13 @@
 # Библеотека
 from aiogram.fsm.state import StatesGroup, State
 from aiogram.fsm.context import FSMContext
-
-from aiogram.filters import Command, StateFilter, or_f
+import math
+from aiogram.filters import or_f
 from aiogram.types import CallbackQuery,Message
 from aiogram import F, Router
 
 # Модули
-from Data.all_dans import get_dans
+from Data.request_currency.request_currency import get_dans
 from bot_create import bot
 
 # Клавиатуры
@@ -56,7 +56,7 @@ async def set_currency2(callback: CallbackQuery, state: FSMContext):
                                           f'Курс: {all_currency[data["currency1"]]} {data["currency1"]} = '
                                           f'{get_dans(data["currency1"], data["currency2"])}'
                                           f' {all_currency[data["currency2"]]} {data["currency2"]}',
-                                          reply_markup=reset_currency2)
+                                          reply_markup= reset_currency2)
 
 ct = 1
 set_msg2 = 0
@@ -80,13 +80,11 @@ async def set_count(message: Message, state: FSMContext):
         data = await state.get_data()
         set_msg2 = await message.answer(f'Можете ввести другю сумму\n\n'
                              f'{all_currency[data["currency1"]]} {data["currency1"]} {check_count} = '
-                             f'{get_dans(data["currency1"], data["currency2"])  * int(data["count"])} '
+                             f'{round(get_dans(data["currency1"], data["currency2"])  * int(data["count"]), 2)} '
                              f'{all_currency[data["currency2"]]} {data["currency2"]}',
                              reply_markup=reset_currency1)
 
 @convertion_procces.callback_query(F.data == 'finish_convertion')
 async def set_count(callback: CallbackQuery, state: FSMContext):
-    await print(state.get_data())
     await state.clear()
-    await print(state.get_data())
 
