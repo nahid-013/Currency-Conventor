@@ -44,7 +44,7 @@ async def set_currency1(callback: CallbackQuery, state: FSMContext):
     await callback.message.edit_text(text=f'Выберите валюту, на которую хотите обменять <b>{data["currency1"]}</b>',
                                      reply_markup= await convertion('to', 'reset_currency1'), parse_mode='HTML')
 
-
+set_msg = ''
 @convertion_procces.callback_query(Convertion.currency2, F.data.startswith('convertion_to'))
 async def set_currency2(callback: CallbackQuery, state: FSMContext):
     global set_msg
@@ -58,27 +58,25 @@ async def set_currency2(callback: CallbackQuery, state: FSMContext):
                                           f' {all_currency[data["currency2"]]} {data["currency2"]}',
                                           reply_markup= reset_currency2)
 
-ct = 1
-set_msg2 = 0
+
 @convertion_procces.message(Convertion.count)
 async def set_count(message: Message, state: FSMContext):
     check_count = message.text.replace(' ', '',).replace(',','').replace('.', '')
     if not check_count.isdigit():
         await message.answer('Введите число')
     else:
-        global ct , set_msg2
-
-        if ct:
-            await bot.edit_message_reply_markup(chat_id=message.chat.id, message_id=set_msg.message_id, reply_markup=None)
-            ct-=1
-
-        if set_msg2:
-            await bot.edit_message_reply_markup(chat_id=message.chat.id, message_id=set_msg2.message_id, reply_markup=None)
-        else: set_msg2+=1
-
+        global set_msg, ans
         await state.update_data(count=check_count)
         data = await state.get_data()
-        set_msg2 = await message.answer(f'Можете ввести другю сумму\n\n'
+
+        if set_msg:
+            await bot.edit_message_reply_markup(chat_id=set_msg.chat.id, message_id=set_msg.message_id,reply_markup=None)
+            set_msg = None
+            ans = False
+        if ans:
+            await bot.edit_message_reply_markup(chat_id=ans.chat.id, message_id=ans.message_id,reply_markup=None)
+
+        ans = await message.answer(f'Можете ввести другю сумму\n\n'
                              f'{all_currency[data["currency1"]]} {data["currency1"]} {check_count} = '
                              f'{round(get_dans(data["currency1"], data["currency2"])  * int(data["count"]), 2)} '
                              f'{all_currency[data["currency2"]]} {data["currency2"]}',
